@@ -359,6 +359,7 @@ namespace Diadoc.Api
 		FileContent GetContent(string token, string typeNamedId, string function, string version, int titleIndex);
 
 		Employee GetEmployee(string authToken, string boxId, string userId);
+		EmployeeList GetEmployees(string authToken, string boxId, int page = 0, int count = 0);
 		Employee CreateEmployee(string authToken, string boxId, [MarshalAs(UnmanagedType.IDispatch)] object employeeToCreate);
 		Employee UpdateEmployee(string authToken, string boxId, string userId, [MarshalAs(UnmanagedType.IDispatch)] object employeeToUpdate);
 		EmployeeSubscriptions GetSubscriptions(string authToken, string boxId, string userId);
@@ -525,6 +526,15 @@ namespace Diadoc.Api
 		public Employee GetEmployee(string authToken, string boxId, string userId)
 		{
 			return diadoc.GetEmployee(authToken, boxId, userId);
+		}
+
+		public EmployeeList GetEmployees(string authToken, string boxId, int page = 0, int count = 0)
+		{
+			return diadoc.GetEmployees(
+				authToken,
+				boxId,
+				page != 0 ? page : (int?) null,
+				count != 0 ? count : (int?) null);
 		}
 
 		public Employee CreateEmployee(string authToken, string boxId, object employeeToCreate)
