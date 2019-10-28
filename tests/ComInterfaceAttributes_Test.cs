@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Diadoc.Api.Com;
 using NUnit.Framework;
 
 namespace Diadoc.Api.Tests
@@ -77,7 +78,7 @@ namespace Diadoc.Api.Tests
 					var message = string.Format("{0}.{1}(..., {2} {3}, ...)", type.FullName, methodInfo.Name, parameterInfo.ParameterType.Name, parameterInfo.Name);
 					var marshalAsAttribute = (MarshalAsAttribute)Attribute.GetCustomAttribute(parameterInfo, typeof(MarshalAsAttribute));
 					Assert.IsNotNull(marshalAsAttribute, message);
-					Assert.That(marshalAsAttribute.Value, Is.EqualTo(UnmanagedType.IDispatch), message);
+					Assert.That(marshalAsAttribute.Value, Is.AnyOf(UnmanagedType.IDispatch, UnmanagedType.AsAny), message);
 					Assert.That(parameterInfo.ParameterType, Is.EqualTo(typeof(object)), message);
 				}
 			}
