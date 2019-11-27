@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -9,15 +10,16 @@ namespace Diadoc.Api
 {
 	public static class XmlSerializerExtensions
 	{
-		public static byte[] SerializeToXml<T>(this T @object)
+		public static byte[] SerializeToXml(this object @object)
 		{
-			var serializer = new XmlSerializer(typeof(T));
+			var type = @object.GetType();
+			var serializer = new XmlSerializer(type);
 			using (var ms = new MemoryStream())
 			{
 				using (var sw = new StreamWriter(ms, Encoding.UTF8))
 				{
 					XmlSerializerNamespaces namespaces = null;
-					var ns = FindXmlNamespace<T>();
+					var ns = FindXmlNamespace(type);
 					if (!IsNullOrWhiteSpace(ns))
 					{
 						namespaces = new XmlSerializerNamespaces();
@@ -32,9 +34,9 @@ namespace Diadoc.Api
 		}
 
 		[CanBeNull]
-		private static string FindXmlNamespace<T>()
+		private static string FindXmlNamespace(Type type)
 		{
-			var root = typeof(T).GetCustomAttributes(typeof(XmlRootAttribute), true).Cast<XmlRootAttribute>().FirstOrDefault();
+			var root = type.GetCustomAttributes(typeof(XmlRootAttribute), true).Cast<XmlRootAttribute>().FirstOrDefault();
 			return root != null && !IsNullOrWhiteSpace(root.Namespace) ? root.Namespace : null;
 		}
 
