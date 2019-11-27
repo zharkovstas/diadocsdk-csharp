@@ -9,7 +9,7 @@ namespace Diadoc.Api
 {
 	public static class XmlSerializerExtensions
 	{
-		public static byte[] SerializeToXml<T>(this T @object)
+		public static byte[] SerializeToXml<T>(T @object)
 		{
 			var serializer = new XmlSerializer(typeof(T));
 			using (var ms = new MemoryStream())
